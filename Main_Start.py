@@ -28,7 +28,7 @@ class SeaofBTCapp(tk.Tk):
     def __init__(self,*args,**kwargs):
         tk.Tk.__init__(self,*args,**kwargs)
 
-        tk.Tk.iconbitmap(self,default = "Support_images/icon.ico")
+        #tk.Tk.iconbitmap(self,default = "Support_images/icon.ico")
         tk.Tk.wm_title(self,"Decision Support Systems V.1.1")
 
         container = tk.Frame(self)
@@ -67,8 +67,7 @@ class StartPage(tk.Frame):
 
         text_label = tk.Label(self,text ='This the initial edition of the decision support system developed by Intelligent Systems Lab at NTNU i Ålesund \n The system has mainly three operation stages:\n 1. Collection of Data from the simulator in real time ')
         text_label.pack()
-
-
+        
         button1 = ttk.Button(self,text = "Get Started",command = lambda : controller.show_frame(PageOne))
         button1.pack()
 
@@ -78,10 +77,21 @@ class PageOne(tk.Frame):
         label = tk.Label(self, text="Page 1", font=LARGE_FONT)
         label.pack(pady=10, padx=10)
 
+
+        text_label = tk.Label(self,text ='Staring the downlink will grab the data from the live simulation and save as csv in the local machine ')
+        text_label.pack()
+
         button1 = ttk.Button(self, text="Start DownLink", command=lambda : controller.show_frame(data_down()))
         button1.pack()
+
+        text_label = tk.Label(self,text ='Starting the plot generate live plot for the incoming data ')
+        text_label.pack()
         button2 = ttk.Button(self, text="Start Plot", command=lambda : controller.show_frame(Pagetwo))
         button2.pack()
+
+        button3 = ttk.Button(self, text="Home Page", command=lambda : controller.show_frame(StartPage))
+        button3.pack()
+
 
 
 
