@@ -21,7 +21,7 @@ import CRI_Functions_Support.deci_sup
 import CRI_Functions_Support.domain
 
 
-img = plt.imread('Support_images/bpo3.png')
+img = plt.imread('Support_images/pure_map.png')
 fig, ax = plt.subplots()
 fig.set_size_inches(13, 7)
 plt.subplots_adjust(left=0.00, right=0.95, top=0.95, bottom=0.05)
@@ -197,6 +197,10 @@ nx4 = 0
 nx5 = 0
 
 def update(frame):
+
+
+
+
     now = datetime.datetime.now()
 
     global nx
@@ -764,10 +768,10 @@ def update(frame):
 
     # Vessel Information Plot
 
-    ows_Info = plt.text(3750, 5300,
+    ows_Info = plt.text(4400, 2300,
                         f'OS: Gunnerus \nVelocity = {round(ov_spd[-1], 1)}Knots\nHeading = {round(ov_heading[-1], 3)} Degree \nDistance Travelled = {round(dtravlled, 2)} NM\nETA = {eta} Min',
                         fontsize=10, color='white')
-
+    '''
     Vsl1_Info = plt.text(4400, 2900,
                          f'T1: PSV_UT754WP\nDCPA = {round(dcpa_tv1, 1)}NM\nTCPA = {-round(tcpa_tv1 * 3600, 3)}s\nCRI = {round(CRI_tv1, 3)}\nVelocity = {round(tv1_spd[-1], 1)} Kn',
                          fontsize=8, color='white')
@@ -785,7 +789,7 @@ def update(frame):
     Vsl5_Info = plt.text(4400, 500,
                          f'T5: PSV_UT776CD\nDCPA = {round(dcpa_tv5, 1)}NM\nTCPA = {-round(tcpa_tv5 * 3600, 3)}s\nCRI = {round(CRI_tv5, 3)}\nVelocity = {round(tv5_spd[-1], 1)}Kn',
                          fontsize=8, color='white')
-
+    '''
     ln_ov.set_data(ov_x, ov_y)
     ln_tv1.set_data(tv1_x, tv1_y)
     ln_tv2.set_data(tv2_x, tv2_y)
@@ -796,7 +800,19 @@ def update(frame):
 
     time_text.set_text(now.strftime("%Y-%m-%d %H:%M:%S"))
 
-    return time_text,plt_ov_mk_com, plt_t00_cir, ows_Info, Vsl5_Info, Vsl4_Info, Vsl3_Info, Vsl2_Info, Vsl1_Info, plt_Dec6, plt_Dec5, plt_Dec4, plt_Dec3, plt_Dec2, ln_ov, ln_tv1, ln_tv2, ln_tv3, ln_tv4, ln_tv5, plt_ov_dom, plt_ov_mk, plt_tv1_mk, plt_t1_dom, plt_tv2_mk, plt_t2_dom, plt_tv3_mk, plt_t3_dom, plt_tv4_mk, plt_t4_dom, plt_tv5_mk, plt_t5_dom, plt_ov_txt, plt_tv1_txt, plt_tv1_cpa, plt_tv2_txt, plt_tv2_cpa, plt_tv3_txt, plt_tv3_cpa, plt_tv4_txt, plt_tv4_cpa, plt_tv5_txt, plt_tv5_cpa, plt_t5_cir, plt_t4_cir, plt_t3_cir, plt_t2_cir, plt_t1_cir, plt_t0_cir, plt_Dec1,
+    Rect = mpimg.imread('Support_images/rect2.png')
+    RectBox = OffsetImage(Rect, zoom=0.75,alpha=0.5)
+    box1 = AnnotationBbox(RectBox, (4985, 1950), frameon=False)
+    ax.add_artist(box1)
+
+    color_bar = mpimg.imread('Support_images/colorbars.png')
+    colorbox = OffsetImage(color_bar, zoom=0.195,alpha=0.5)
+    color = AnnotationBbox(colorbox, (5000, 4000), frameon=False)
+    ax.add_artist(color)
+
+
+
+    return time_text,plt_ov_mk_com, plt_t00_cir, ows_Info, plt_Dec6, plt_Dec5, plt_Dec4, plt_Dec3, plt_Dec2, ln_ov, ln_tv1, ln_tv2, ln_tv3, ln_tv4, ln_tv5, plt_ov_dom, plt_ov_mk, plt_tv1_mk, plt_t1_dom, plt_tv2_mk, plt_t2_dom, plt_tv3_mk, plt_t3_dom, plt_tv4_mk, plt_t4_dom, plt_tv5_mk, plt_t5_dom, plt_ov_txt, plt_tv1_txt, plt_tv1_cpa, plt_tv2_txt, plt_tv2_cpa, plt_tv3_txt, plt_tv3_cpa, plt_tv4_txt, plt_tv4_cpa, plt_tv5_txt, plt_tv5_cpa, plt_t5_cir, plt_t4_cir, plt_t3_cir, plt_t2_cir, plt_t1_cir, plt_t0_cir, plt_Dec1,
 
 class UnsizedMarker(MarkerStyle):
 
