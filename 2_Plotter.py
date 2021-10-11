@@ -24,6 +24,7 @@ import CRI_Functions_Support.domain
 img = plt.imread('Support_images/pure_map.png')
 fig, ax = plt.subplots()
 fig.set_size_inches(13, 7)
+fig.patch.set_facecolor('#000000')
 plt.subplots_adjust(left=0.00, right=0.95, top=0.95, bottom=0.05)
 ax.imshow(img, extent=[-4122, 6028, -400, 4675], alpha=0.96)
 plt.xlim([-4122, 6028])
