@@ -811,9 +811,16 @@ def update(frame):
     color = AnnotationBbox(colorbox, (5000, 4000), frameon=False)
     ax.add_artist(color)
 
+    Recco = plt.text(4400, 1600,f'Recommendation ', fontsize=10, color='white')
+
+    Rec_box = mpimg.imread('Support_images/rec_box.png')
+    Rec1 = OffsetImage(Rec_box, zoom=0.8,alpha=0.5)
+    rec = AnnotationBbox(Rec1, (5000, 1000), frameon=False)
+    ax.add_artist(rec)
 
 
-    return time_text,plt_ov_mk_com, plt_t00_cir, ows_Info, plt_Dec6, plt_Dec5, plt_Dec4, plt_Dec3, plt_Dec2, ln_ov, ln_tv1, ln_tv2, ln_tv3, ln_tv4, ln_tv5, plt_ov_dom, plt_ov_mk, plt_tv1_mk, plt_t1_dom, plt_tv2_mk, plt_t2_dom, plt_tv3_mk, plt_t3_dom, plt_tv4_mk, plt_t4_dom, plt_tv5_mk, plt_t5_dom, plt_ov_txt, plt_tv1_txt, plt_tv1_cpa, plt_tv2_txt, plt_tv2_cpa, plt_tv3_txt, plt_tv3_cpa, plt_tv4_txt, plt_tv4_cpa, plt_tv5_txt, plt_tv5_cpa, plt_t5_cir, plt_t4_cir, plt_t3_cir, plt_t2_cir, plt_t1_cir, plt_t0_cir, plt_Dec1,
+
+    return Recco,time_text,plt_ov_mk_com, plt_t00_cir, ows_Info, plt_Dec6, plt_Dec5, plt_Dec4, plt_Dec3, plt_Dec2, ln_ov, ln_tv1, ln_tv2, ln_tv3, ln_tv4, ln_tv5, plt_ov_dom, plt_ov_mk, plt_tv1_mk, plt_t1_dom, plt_tv2_mk, plt_t2_dom, plt_tv3_mk, plt_t3_dom, plt_tv4_mk, plt_t4_dom, plt_tv5_mk, plt_t5_dom, plt_ov_txt, plt_tv1_txt, plt_tv1_cpa, plt_tv2_txt, plt_tv2_cpa, plt_tv3_txt, plt_tv3_cpa, plt_tv4_txt, plt_tv4_cpa, plt_tv5_txt, plt_tv5_cpa, plt_t5_cir, plt_t4_cir, plt_t3_cir, plt_t2_cir, plt_t1_cir, plt_t0_cir, plt_Dec1,
 
 class UnsizedMarker(MarkerStyle):
 
