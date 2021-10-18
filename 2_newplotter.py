@@ -96,10 +96,6 @@ class Ship_data:
 
 
 
-
-
-
-
 class RotatedRect:
     def __init__(self, cx, cy, p1, p2, p3, p4, p5, angle):
         self.cx = cx
@@ -139,23 +135,6 @@ def str2float(s):
 
 # CPA and CRI Function
 def cpa(ov_spd, ov_heading, ov_x, ov_y, tv_spd, tv_heading, tv_x, tv_y):
-    distance_ov_tv_x = round(tv_x - ov_x, 3)
-    distance_ov_tv_y = round(tv_y - ov_y, 3)
-    distance_ov_tv = round((distance_ov_tv_x ** 2 + distance_ov_tv_y ** 2) ** 0.5, 3)
-    ov_spd_x = round(ov_spd * np.sin(np.deg2rad(ov_heading)), 3)
-    ov_spd_y = round(ov_spd * np.cos(np.deg2rad(ov_heading)), 3)
-    tv_spd_x = round(tv_spd * np.sin(np.deg2rad(tv_heading)), 3)
-    tv_spd_y = round(tv_spd * np.cos(np.deg2rad(tv_heading)), 3)
-    spd_rltv_x = round(tv_spd_x - ov_spd_x, 3)
-    spd_rltv_y = round(tv_spd_y - ov_spd_y, 3)
-    spd_rltv = round((spd_rltv_x ** 2 + spd_rltv_y ** 2) ** 0.5, 3)
-    dcpa = round(distance_ov_tv * (spd_rltv_x / spd_rltv * distance_ov_tv_y /
-                                   distance_ov_tv - spd_rltv_y / spd_rltv * distance_ov_tv_x / distance_ov_tv), 3)
-    tcpa = round(distance_ov_tv * (spd_rltv_x / spd_rltv * distance_ov_tv_x / distance_ov_tv +
-                                   spd_rltv_y / spd_rltv * distance_ov_tv_y / distance_ov_tv) / spd_rltv, 3)
-    cpa_x = round(ov_x + (-tcpa) * ov_spd_x, 3)
-    cpa_y = round(ov_y + (-tcpa) * ov_spd_y, 3)
-    cpa = [cpa_x, cpa_y]
 
     ov_x_N = ov_x * 0.000539957
     ov_y_N = ov_y * 0.000539957
@@ -229,12 +208,7 @@ nx4 = 0
 nx5 = 0
 
 def update(frame):
-
-
-
-
     now = datetime.datetime.now()
-
     global nx
     global nx2
     global nx3
