@@ -36,28 +36,6 @@ plt.grid(alpha=0.2)
 ax.set_title(u"|Real Time DS System|")
 ax.legend()
 
-Rect = mpimg.imread('Support_images/rect2.png')
-RectBox = OffsetImage(Rect, zoom=0.75, alpha=0.5)
-box1 = AnnotationBbox(RectBox, (4985, 1950), frameon=False)
-ax.add_artist(box1)
-
-color_bar = mpimg.imread('Support_images/colorbars.png')
-colorbox = OffsetImage(color_bar, zoom=0.195, alpha=0.5)
-color = AnnotationBbox(colorbox, (5000, 4000), frameon=False)
-ax.add_artist(color)
-
-Recco = plt.text(4500, 1500, f'Recommendation ', fontsize=10, color='white')
-
-Comps = mpimg.imread('Support_images/comp_3.png')
-compass = OffsetImage(Comps, zoom=0.15, alpha=0.5)
-commp = AnnotationBbox(compass, (3000, 800), frameon=False)
-ax.add_artist(commp)
-
-Rec_box = mpimg.imread('Support_images/rec_box.png')
-Rec1 = OffsetImage(Rec_box, zoom=0.8, alpha=0.5)
-rec = AnnotationBbox(Rec1, (5000, 1000), frameon=False)
-ax.add_artist(rec)
-
 # departure and arrival
 x = [0, -24]
 y = [0, 4088]
@@ -132,22 +110,6 @@ def str2float(s):
 def cpa(ov_spd, ov_heading, ov_x, ov_y, tv_spd, tv_heading, tv_x, tv_y):
     distance_ov_tv_x = round(tv_x - ov_x, 3)
     distance_ov_tv_y = round(tv_y - ov_y, 3)
-    distance_ov_tv = round((distance_ov_tv_x ** 2 + distance_ov_tv_y ** 2) ** 0.5, 3)
-    ov_spd_x = round(ov_spd * np.sin(np.deg2rad(ov_heading)), 3)
-    ov_spd_y = round(ov_spd * np.cos(np.deg2rad(ov_heading)), 3)
-    tv_spd_x = round(tv_spd * np.sin(np.deg2rad(tv_heading)), 3)
-    tv_spd_y = round(tv_spd * np.cos(np.deg2rad(tv_heading)), 3)
-    spd_rltv_x = round(tv_spd_x - ov_spd_x, 3)
-    spd_rltv_y = round(tv_spd_y - ov_spd_y, 3)
-    spd_rltv = round((spd_rltv_x ** 2 + spd_rltv_y ** 2) ** 0.5, 3)
-    dcpa = round(distance_ov_tv * (spd_rltv_x / spd_rltv * distance_ov_tv_y /
-                                   distance_ov_tv - spd_rltv_y / spd_rltv * distance_ov_tv_x / distance_ov_tv), 3)
-    tcpa = round(distance_ov_tv * (spd_rltv_x / spd_rltv * distance_ov_tv_x / distance_ov_tv +
-                                   spd_rltv_y / spd_rltv * distance_ov_tv_y / distance_ov_tv) / spd_rltv, 3)
-    cpa_x = round(ov_x + (-tcpa) * ov_spd_x, 3)
-    cpa_y = round(ov_y + (-tcpa) * ov_spd_y, 3)
-    cpa = [cpa_x, cpa_y]
-
     ov_x_N = ov_x * 0.000539957
     ov_y_N = ov_y * 0.000539957
     tv_x_N = tv_x * 0.000539957
@@ -156,10 +118,13 @@ def cpa(ov_spd, ov_heading, ov_x, ov_y, tv_spd, tv_heading, tv_x, tv_y):
     Dc1 = (CRI_Functions_Support.CRI_FunExe.CRI_call(ov_spd, tv_spd, ov_x_N, ov_y_N, tv_x_N, tv_y_N, ov_heading, tv_heading))
 
     timm = 0
-    pck = (
-    Dc1[0], Dc1[2], cpa, 0.9 * Dc1[1], Dc1[3], Dc1[4], timm, ov_spd, tv_spd, dcpa, tcpa, Dc1[5], Dc1[6], Dc1[7], Dc1[8],
-    Dc1[9], Dc1[10], Dc1[11], Dc1[12], Dc1[13], Dc1[14], Dc1[15], Dc1[16], Dc1[17], Dc1[18], Dc1[19], Dc1[20], Dc1[21],
-    Dc1[22], Dc1[23], Dc1[23])
+    DCPA_pass = Dc1[0]
+    TCPA_pass = Dc1[2]
+    OS_v_pass = Dc1[16]
+    TS_v_pass = Dc1[17]
+    Alpha_OT = Dc1[5]
+    Dist_Btwn = Dc1[8]
+    pck = (DCPA_pass,TCPA_pass,OS_v_pass,TS_v_pass,Alpha_OT,Dist_Btwn)
     return pck
 
 
@@ -303,15 +268,14 @@ def update(frame):
 
     dcpa_tv1 = pk1[0]
     tcpa_tv1 = pk1[1]
-    cpa_tv1 = pk1[2]
-    CRI_tv1 = pk1[3]
+    #cpa_tv1 = pk1[2]
+    CRI_tv1 = pk1[2]
     own_speed = pk1[7]
     t1_sp = pk1[8]
     skl_T1 = (4 * t1_sp)
     skl = (5 * own_speed)
     alp_ot1 = pk1[11]
     Dbtwn1 = pk1[14]
-    new_dcpa_chk = pk1[21]
     osvv1 = pk1[22]
     tsvv1 = pk1[23]
     osan1 = pk1[24]
@@ -387,8 +351,8 @@ def update(frame):
                             alpha=0.26, linestyle='dashed')
 
     # --------------------------------------------------- Vessel Plot ---------------------------------------------------
-    plt_tv1_cpa = ax.scatter(cpa_tv1[0], cpa_tv1[1], marker='^', color='blue', s=0)
-    plt_tv1_txt = plt.text(tv1_x[-1] + 100, tv1_y[-1],f'T1: PSV_UT754WP \n CRI = {round(CRI_tv1, 3)}\nDCPA = {round(dcpa_tv1, 1)}m \nDCPA chk = {round(new_dcpa_chk, 1)}m\n TCPA = {-round(tcpa_tv1, 3)}s ',fontsize=10, color='white')
+    #plt_tv1_cpa = ax.scatter(cpa_tv1[0], cpa_tv1[1], marker='^', color='blue', s=0)
+    plt_tv1_txt = plt.text(tv1_x[-1] + 100, tv1_y[-1],f'T1: PSV_UT754WP \n CRI = {round(CRI_tv1, 3)}\nDCPA = {round(dcpa_tv1, 1)}m \n TCPA = {-round(tcpa_tv1, 3)}s ',fontsize=10, color='white')
 
     # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     # ---------------------------------------------------- T2 SHIP -----------------------------------------------------
@@ -765,56 +729,36 @@ def update(frame):
     # DEcesion Support msg :
 
     if CRI_tv1 > 0.6 and Dbtwn1 < 0.4:
-        plt_Dec1 = plt.text(4500, 900,
+        plt_Dec1 = plt.text(4500, -300,
                             f'T1: PSV_UT754WP entered the CAZ \n {dec1[0]} \n {dec1[1]}\n {dec1[2]}\n {dec1[3]}\n {dec1[4]}',
-                            fontsize=9, color='white')
+                            fontsize=6, color='white')
 
     elif CRI_tv2 > 0.6 and Dbtwn2 < 0.4:
-        plt_Dec2 = plt.text(4500, 900,
+        plt_Dec2 = plt.text(4500, -300,
                             f'T2: PSV_UT751E entered the CAZ\n {dec2[0]} \n {dec2[1]}\n {dec2[2]}\n {dec2[3]}\n {dec2[4]}',
-                            fontsize=9, color='white')
+                            fontsize=6, color='white')
     elif CRI_tv3 > 0.6 and Dbtwn3 < 0.4:
-        plt_Dec3 = plt.text(4500, 900,
+        plt_Dec3 = plt.text(4500, -300,
                             f'T3: PSV_3300CD entered the CAZ\n {dec3[0]} \n {dec3[1]}\n {dec3[2]}\n {dec3[3]}\n {dec3[4]}',
-                            fontsize=9, color='white')
+                            fontsize=6, color='white')
     elif CRI_tv4 > 0.6 and Dbtwn4 < 0.4:
-        plt_Dec4 = plt.text(4500, 900,
+        plt_Dec4 = plt.text(4500, -300,
                             f'T4: PX105_RMY entered the CAZ\n {dec4[0]} \n {dec4[1]}\n {dec4[2]}\n {dec4[3]}\n {dec4[4]}',
-                            fontsize=9, color='white')
+                            fontsize=6, color='white')
     elif CRI_tv5 > 0.6 and Dbtwn5 < 0.4:
-        plt_Dec5 = plt.text(4500, 900,
+        plt_Dec5 = plt.text(4500, -300,
                             f'T5: PSV_UT776CD entered the CAZ\n {dec5[0]} \n {dec5[1]}\n {dec5[2]}\n {dec5[3]}\n {dec5[4]}',
-                            fontsize=9, color='white')
+                            fontsize=6, color='white')
     else:
-        plt_Dec6 = plt.text(4500, 900, f'Continue The Course',
-                            fontsize=9, color='white')
+        plt_Dec6 = plt.text(4500, -300, f'Continue The Course',
+                            fontsize=6, color='white')
 
     # Vessel Information Plot
 
-    ownss = plt.text(4200, 3200, f'Own Ship Information: ', fontsize=12, color='white')
-
-    ows_Info = plt.text(4200, 2300,
+    ows_Info = plt.text(4400, 2300,
                         f'OS: Gunnerus \nVelocity = {round(ov_spd[-1], 1)}Knots\nHeading = {round(ov_heading[-1], 3)} Degree \nDistance Travelled = {round(dtravlled, 2)} NM\nETA = {eta} Min',
                         fontsize=10, color='white')
-    '''
-    Vsl1_Info = plt.text(4400, 2900,
-                         f'T1: PSV_UT754WP\nDCPA = {round(dcpa_tv1, 1)}NM\nTCPA = {-round(tcpa_tv1 * 3600, 3)}s\nCRI = {round(CRI_tv1, 3)}\nVelocity = {round(tv1_spd[-1], 1)} Kn',
-                         fontsize=8, color='white')
-    Vsl2_Info = plt.text(4400, 2300,
-                         f'T2: PSV_UT751E\nDCPA = {round(dcpa_tv2, 1)}NM\nTCPA = {-round(tcpa_tv2 * 3600, 3)}s\nCRI = {round(CRI_tv2, 3)}\nVelocity = {round(tv2_spd[-1], 1)}Kn',
-                         fontsize=8, color='white')
-    Vsl3_Info = plt.text(4400, 1700,
-                         f'T3: PSV_3300CD\nDCPA = {round(dcpa_tv3, 1)}NM\nTCPA = {-round(tcpa_tv3 * 3600, 3)}s\nCRI = {round(CRI_tv3, 3)}\nVelocity = {round(tv3_spd[-1], 1)}Kn',
-                         fontsize=8, color='white')
 
-    Vsl4_Info = plt.text(4400, 1100,
-                         f'T4: PX105_RMY\nDCPA = {round(dcpa_tv4, 1)}NM\nTCPA = {-round(tcpa_tv4 * 3600, 3)}s\nCRI = {round(CRI_tv4, 3)}\nVelocity = {round(tv4_spd[-1], 1)}Kn',
-                         fontsize=8, color='white')
-
-    Vsl5_Info = plt.text(4400, 500,
-                         f'T5: PSV_UT776CD\nDCPA = {round(dcpa_tv5, 1)}NM\nTCPA = {-round(tcpa_tv5 * 3600, 3)}s\nCRI = {round(CRI_tv5, 3)}\nVelocity = {round(tv5_spd[-1], 1)}Kn',
-                         fontsize=8, color='white')
-    '''
     ln_ov.set_data(ov_x, ov_y)
     ln_tv1.set_data(tv1_x, tv1_y)
     ln_tv2.set_data(tv2_x, tv2_y)
@@ -825,13 +769,26 @@ def update(frame):
 
     time_text.set_text(now.strftime("%Y-%m-%d %H:%M:%S"))
 
-    return ownss,Recco,time_text,plt_ov_mk_com, plt_t00_cir, ows_Info, plt_Dec6, plt_Dec5, plt_Dec4, plt_Dec3, plt_Dec2, ln_ov, ln_tv1, ln_tv2, ln_tv3, ln_tv4, ln_tv5, plt_ov_dom, plt_ov_mk, plt_tv1_mk, plt_t1_dom, plt_tv2_mk, plt_t2_dom, plt_tv3_mk, plt_t3_dom, plt_tv4_mk, plt_t4_dom, plt_tv5_mk, plt_t5_dom, plt_ov_txt, plt_tv1_txt, plt_tv1_cpa, plt_tv2_txt, plt_tv2_cpa, plt_tv3_txt, plt_tv3_cpa, plt_tv4_txt, plt_tv4_cpa, plt_tv5_txt, plt_tv5_cpa, plt_t5_cir, plt_t4_cir, plt_t3_cir, plt_t2_cir, plt_t1_cir, plt_t0_cir, plt_Dec1,
+    Rect = mpimg.imread('Support_images/rect2.png')
+    RectBox = OffsetImage(Rect, zoom=0.75,alpha=0.5)
+    box1 = AnnotationBbox(RectBox, (4985, 1950), frameon=False)
+    ax.add_artist(box1)
+
+    color_bar = mpimg.imread('Support_images/colorbars.png')
+    colorbox = OffsetImage(color_bar, zoom=0.195,alpha=0.5)
+    color = AnnotationBbox(colorbox, (5000, 4000), frameon=False)
+    ax.add_artist(color)
+
+
+
+    return time_text,plt_ov_mk_com, plt_t00_cir, ows_Info, plt_Dec6, plt_Dec5, plt_Dec4, plt_Dec3, plt_Dec2, ln_ov, ln_tv1, ln_tv2, ln_tv3, ln_tv4, ln_tv5, plt_ov_dom, plt_ov_mk, plt_tv1_mk, plt_t1_dom, plt_tv2_mk, plt_t2_dom, plt_tv3_mk, plt_t3_dom, plt_tv4_mk, plt_t4_dom, plt_tv5_mk, plt_t5_dom, plt_ov_txt, plt_tv1_txt, plt_tv1_cpa, plt_tv2_txt, plt_tv2_cpa, plt_tv3_txt, plt_tv3_cpa, plt_tv4_txt, plt_tv4_cpa, plt_tv5_txt, plt_tv5_cpa, plt_t5_cir, plt_t4_cir, plt_t3_cir, plt_t2_cir, plt_t1_cir, plt_t0_cir, plt_Dec1,
 
 class UnsizedMarker(MarkerStyle):
 
     def _set_custom_marker(self, path):
         self._transform = transforms.IdentityTransform()
         self._path = path
+
 
 ani = FuncAnimation(fig, update, frames=np.arange(1, 200000, 1), blit=True, interval=10, repeat=False)  # interval (ms)
 

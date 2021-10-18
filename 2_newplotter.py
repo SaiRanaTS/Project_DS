@@ -90,6 +90,15 @@ ln_tv5, = ax.plot([], [], 'yellow', animated=False, alpha=0.15)
 # time = []
 time_text = ax.text(0.05, 0.9, '', transform=ax.transAxes, color='white')
 
+class Ship_data:
+    def __init__(self,dcpa):
+        self.dcpa = dcpa
+
+
+
+
+
+
 
 class RotatedRect:
     def __init__(self, cx, cy, p1, p2, p3, p4, p5, angle):

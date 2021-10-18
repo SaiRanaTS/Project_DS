@@ -30,6 +30,7 @@ with open('Data_Collected/TS2_Data.csv', 'w') as csv_file:
     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     csv_writer.writeheader()
 
+
 with open('Data_Collected/TS3_Data.csv', 'w') as csv_file:
     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     csv_writer.writeheader()
@@ -434,7 +435,7 @@ def TS5_find_gps_port_value(actor, port_type, port_name_ls,n):
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
             info = {
-                "Num": n-1,
+                "Num": n,
                 "Speed X": speed[0],
                 "Speed Y": speed[1],
                 "Speed Z": speed[2],
@@ -685,7 +686,7 @@ def ls_to_dic(receivedata, port_gps_info):
 
 async def start():
     num = 0
-    uri = "ws://192.168.114.18:8887"
+    uri = "ws://192.168.114.222:8887"
     actor_info = {
         'clazz': '',
         'name': '',

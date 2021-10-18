@@ -7,7 +7,7 @@ import math
 
 def view_actor_data(actor, port_type, port_name):
     pass
-fieldnames = ["Num","Speed X", "Speed Y", "Speed Z","Total Speed", "Lo", "La", "Heading(Deg)"]
+fieldnames = ["Num","OS Speed X", "OS Speed Y", "OS Speed Z","OS Total Speed", "OS Lo", "OS La", "OS Heading(Deg)","TS1 Speed X", "TS1 Speed Y", "TS1 Speed Z","TS1 Total Speed", "TS1 Lo", "TS1 La", "TS1 Heading(Deg)"]
 
 fieldnamesP = ["Num","Speed X", "Speed Y", "Speed Z","Total Speed", "Lo", "La", "Heading(Deg)"]
 
@@ -18,61 +18,15 @@ fieldnamesoriTS3 = ["Num", "TS3_Ori"]
 fieldnamesoriTS4 = ["Num", "TS4_Ori"]
 fieldnamesoriTS5 = ["Num", "TS5_Ori"]
 
-with open('Data_Collected/OS_Data.csv', 'w') as csv_file:
+with open('Data_Collected/Data_Collected1.csv', 'w') as csv_file:
     csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
     csv_writer.writeheader()
-
-with open('Data_Collected/TS1_Data.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
-
-with open('Data_Collected/TS2_Data.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
-
-with open('Data_Collected/TS3_Data.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
-
-with open('Data_Collected/TS4_Data.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
-
-with open('Data_Collected/TS5_Data.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
-    csv_writer.writeheader()
-
-
-with open('Data_Collected/ori/OriOS.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnamesoriOS)
-    csv_writer.writeheader()
-
-with open('Data_Collected/ori/OriTS1.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnamesoriTS1)
-    csv_writer.writeheader()
-
-with open('Data_Collected/ori/OriTS2.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnamesoriTS2)
-    csv_writer.writeheader()
-
-with open('Data_Collected/ori/OriTS3.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnamesoriTS3)
-    csv_writer.writeheader()
-
-with open('Data_Collected/ori/OriTS4.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnamesoriTS4)
-    csv_writer.writeheader()
-
-with open('Data_Collected/ori/OriTS5.csv', 'w') as csv_file:
-    csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnamesoriTS5)
-    csv_writer.writeheader()
-
-
 
 def OS_find_gps_port_value(actor, port_type, port_name_ls,n):
-    #print(n)
+
+
     port_list = actor[port_type]
-    #print('port list :',actor)
+    print('port list :',actor)
     num_port = len(port_list)
     #print('num_port: ',num_port)
     num_port_name = len(port_name_ls)
@@ -111,18 +65,18 @@ def OS_find_gps_port_value(actor, port_type, port_name_ls,n):
     key1 = 0
     if key1 == 0:
 
-        with open('Data_Collected/OS_Data.csv', 'a') as csv_file:
+        with open('Data_Collected/Data_Collected1.csv', 'a') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
             info = {
                 "Num": n-1,
-                "Speed X": speed[0],
-                "Speed Y": speed[1],
-                "Speed Z": speed[2],
-                "Total Speed" : total_speed,
-                "Lo": gps_info[2],
-                "La": gps_info[3],
-                "Heading(Deg)":  math.degrees(gps_info[4]),
+                "OS Speed X": speed[0],
+                "OS Speed Y": speed[1],
+                "OS Speed Z": speed[2],
+                "OS Total Speed" : total_speed,
+                "OS Lo": gps_info[2],
+                "OS La": gps_info[3],
+                "OS Heading(Deg)":  math.degrees(gps_info[4]),
             }
             csv_writer.writerow(info)
 
@@ -169,20 +123,20 @@ def TS1_find_gps_port_value(actor, port_type, port_name_ls,n):
     print('Heading(Deg) : ', -ha1)
     print('---------------------')
     key1 = 0
+    
     if key1 == 0:
 
-        with open('Data_Collected/TS1_Data.csv', 'a') as csv_file:
+        with open('Data_Collected/Data_Collected1.csv', 'a') as csv_file:
             csv_writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
             info = {
-                "Num": n,
-                "Speed X": speed[0],
-                "Speed Y": speed[1],
-                "Speed Z": speed[2],
-                "Total Speed" : total_speed,
-                "Lo": gps_info[2],
-                "La": gps_info[3],
-                "Heading(Deg)": (ha1-180),
+                "TS1 Speed X": speed[0],
+                "TS1 Speed Y": speed[1],
+                "TS1 Speed Z": speed[2],
+                "TS1 Total Speed" : total_speed,
+                "TS1 Lo": gps_info[2],
+                "TS1 La": gps_info[3],
+                "TS1 Heading(Deg)": (ha1-180),
             }
             csv_writer.writerow(info)
 
@@ -685,7 +639,7 @@ def ls_to_dic(receivedata, port_gps_info):
 
 async def start():
     num = 0
-    uri = "ws://192.168.114.18:8887"
+    uri = "ws://192.168.114.222:8887"
     actor_info = {
         'clazz': '',
         'name': '',
@@ -878,7 +832,7 @@ async def start():
                         actor_orits5 = actor_ts5_1[i]
 
                         actor1 = await evaluate_actor(data_dic, actor_info1['clazz'],
-                                                     actor_info1['name'])  # out the dic data type
+                                                     actor_info1['name'])
 
                         actor2 = await evaluate_actor(data_dic, actor_info2['clazz'],
                                                      actor_info2['name'])  # out the dic data type
